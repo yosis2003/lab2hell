@@ -23,9 +23,9 @@
 
 #include "Adafruit_SSD1351.h"
 
-//#define DC 0x10 //pin 18
-//#define RESET 0x80 //pin 62
-//#define OC 0x40 // pin 15
+//#define DC 0x80 //pin 62
+//#define RESET 0x10 //pin 18
+//#define OC 0x40 // pin 61
 
 //*****************************************************************************
 
@@ -38,16 +38,17 @@ void writeCommand(unsigned char c) {
     unsigned long ulDummy; // var to hold response from slave
 
     MAP_SPICSEnable(GSPI_BASE);
+    GPIOPinWrite(GPIOA0_BASE, 0x80, 0x00); // set data pin low, only sending command
 
-    GPIOPinWrite(GPIOA3_BASE, 0x10, 0x00); // set data pin low, only sending command
-    GPIOPinWrite(GPIOA2_BASE, 0x40, 0x00); // CS low
+    GPIOPinWrite(GPIOA0_BASE, 0x40, 0x00); // CS low
 
     MAP_SPIDataPut(GSPI_BASE, c); // Put data to slave
 
     MAP_SPIDataGet(GSPI_BASE,&ulDummy); // Receive response from slave
-    GPIOPinWrite(GPIOA2_BASE, 0x40, 0x40); // pull CS high
 
+    GPIOPinWrite(GPIOA0_BASE, 0x40, 0x40); // pull CS high
     MAP_SPICSDisable(GSPI_BASE);
+
 
 
 
@@ -65,16 +66,18 @@ void writeData(unsigned char c) {
 
     MAP_SPICSEnable(GSPI_BASE);
 
-    GPIOPinWrite(GPIOA3_BASE,0x10, 0x10); //Set Data command pin High
-    GPIOPinWrite(GPIOA2_BASE, 0x40, 0x00); // Set Chip-Select Pin Low
+    GPIOPinWrite(GPIOA0_BASE, 0x80, 0x80); //Set Data command pin High
+    GPIOPinWrite(GPIOA0_BASE, 0x40, 0x00); // Set Chip-Select Pin Low
 
     MAP_SPIDataPut(GSPI_BASE, c); // Put data to slave
 
     //Message("\n\r\r Visit writeData func \n\r");
     MAP_SPIDataGet(GSPI_BASE,&ulDummy); // Receive Response from Slave
-    GPIOPinWrite(GPIOA2_BASE, 0x40, 0x40); // Set CS Pin High
 
     MAP_SPICSDisable(GSPI_BASE);
+    GPIOPinWrite(GPIOA0_BASE, 0x40, 0x40); // Set CS Pin High
+
+
 }
 
 //*****************************************************************************
@@ -90,11 +93,11 @@ void Adafruit_Init(void){
 
   volatile unsigned long delay;
 
-  GPIOPinWrite(GPIOA0_BASE, 0x80, 0x00);	// RESET = RESET_LOW, changed to pin 61
+  GPIOPinWrite(GPIOA3_BASE, 0x10, 0x00);	// RESET = RESET_LOW, changed to pin 61
 
   for(delay=0; delay<100; delay=delay+1);// delay minimum 100 ns
 
-  GPIOPinWrite(GPIOA0_BASE, 0x80, 0x80);	// RESET = RESET_HIGH, changed to pin 61
+  GPIOPinWrite(GPIOA3_BASE, 0x10, 0x10);	// RESET = RESET_HIGH, changed to pin 61
 
 	// Initialization Sequence
   writeCommand(SSD1351_CMD_COMMANDLOCK);  // set command lock

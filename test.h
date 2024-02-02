@@ -8,6 +8,19 @@
 #ifndef TEST_H_
 #define TEST_H_
 
+extern int cursor_x;
+extern int cursor_y;
+
+// Color definitions
+#define BLACK           0x0000
+#define BLUE            0x001F
+#define GREEN           0x07E0
+#define CYAN            0x07FF
+#define RED             0xF800
+#define MAGENTA         0xF81F
+#define YELLOW          0xFFE0
+#define WHITE           0xFFFF
+
 void delay(unsigned long ulCount);
 void helloworld();
 void horizontal();

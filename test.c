@@ -8,91 +8,123 @@
 
 // TODO Configure SPI port and use these libraries to implement
 // an OLED test program. See SPI example program.
-
-
+#include "test.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1351.h"
-#include "test.h"
 #include "glcdfont.h"
 #include "string.h"
-
-extern int cursor_x;
-extern int cursor_y;
+#include "stdio.h"
 
 float p = 3.1415926;
-
-// Color definitions
-#define	BLACK           0x0000
-#define	BLUE            0x001F
-#define	GREEN           0x07E0
-#define CYAN            0x07FF
-#define	RED             0xF800
-#define MAGENTA         0xF81F
-#define YELLOW          0xFFE0
-#define WHITE           0xFFFF
 
 //*****************************************************************************
 //  function delays 3*ulCount cycles
 void delay(unsigned long ulCount){
-	int i;
+    int i;
 
   do{
     ulCount--;
-		for (i=0; i< 65535; i++) ;
-	}while(ulCount);
+        for (i=0; i< 65535; i++) ;
+    }while(ulCount);
 }
 
 
 //*****************************************************************************
 
-/*void helloworld(){
-    drawChar(0, 64, "H", RED, RED, 2);
-
-*/
-
-//*****************************************************************************
-void horizontal(){
-    fillRect (0, 0, 16, 128, BLUE);
-
-}
-
-//*****************************************************************************
-void vertical(){
-    fillRect (0, 0, 128, 16, BLUE);
+void helloworld() {
+    drawChar(0, 64, 'H', WHITE, WHITE, 2);
+    drawChar(10, 64, 'e', WHITE, WHITE, 2);
+    drawChar(20, 64, 'l', WHITE, WHITE, 2);
+    drawChar(30, 64, 'l', WHITE, WHITE, 2);
+    drawChar(40, 64, 'o', WHITE, WHITE, 2);
+    drawChar(60, 64, 'W', WHITE, WHITE, 2);
+    drawChar(70, 64, 'o', WHITE, WHITE, 2);
+    drawChar(80, 64, 'r', WHITE, WHITE, 2);
+    drawChar(90, 64, 'l', WHITE, WHITE, 2);
+    drawChar(100, 64, 'd', WHITE, WHITE, 2);
+    drawChar(110, 64, '!', WHITE, WHITE, 2);
 
 }
 
 //*****************************************************************************
-void characterSet(){
+
+void characterSet() {
+    fillScreen(BLACK);
+           int i;
+           int x = 0; //x coordinates
+           int y = 0;//y coordinates
+
+           for(i = 0; i < 255; ++i){
+               drawChar(x, y, i, WHITE, 0x0000, 1);
+               if(x < 114) x+=6;
+               else{
+                   y += 9;
+                   x = 1;
+               }
+    }
 
 }
 
+//*****************************************************************************
+
+void horizontal() {
+    fillRect(0, 0, 16, 128, BLACK);
+    fillRect(16, 0, 16, 128, BLUE);
+    fillRect(32, 0, 16, 128, GREEN);
+    fillRect(48, 0, 16, 128, CYAN);
+    fillRect(64, 0, 16, 128, RED);
+    fillRect(80, 0, 16, 128, MAGENTA);
+    fillRect(96, 0, 16, 128, YELLOW);
+    fillRect(112, 0, 16, 128, WHITE);
+#define BLACK           0x0000
+#define BLUE            0x001F
+#define GREEN           0x07E0
+#define CYAN            0x07FF
+#define RED             0xF800
+#define MAGENTA         0xF81F
+#define YELLOW          0xFFE0
+#define WHITE           0xFFFF
+}
 
 //*****************************************************************************
+
+void vertical() {
+    fillRect(0, 0, 128, 16, BLACK);
+    fillRect(0, 16, 128, 16, BLUE);
+    fillRect(0, 32, 128, 16, GREEN);
+    fillRect(0, 48, 128, 16, CYAN);
+    fillRect(0, 64, 128, 16, RED);
+    fillRect(0, 80, 128, 16, MAGENTA);
+    fillRect(0, 96, 128, 16, YELLOW);
+    fillRect(0, 112, 128, 16, WHITE);
+}
+
+//*****************************************************************************
+
 void testfastlines(unsigned int color1, unsigned int color2) {
-	unsigned int x;
-	unsigned int y;
+    unsigned int x;
+    unsigned int y;
 
    fillScreen(BLACK);
    for (y=0; y < height()-1; y+=8) {
      drawFastHLine(0, y, width()-1, color1);
    }
-	 delay(100);
+     delay(100);
    for (x=0; x < width()-1; x+=8) {
      drawFastVLine(x, 0, height()-1, color2);
    }
-	 delay(100);
+     delay(100);
 }
 
 //*****************************************************************************
 
 void testdrawrects(unsigned int color) {
-	unsigned int x;
+    unsigned int x;
 
  fillScreen(BLACK);
  for (x=0; x < height()-1; x+=6) {
    drawRect((width()-1)/2 -x/2, (height()-1)/2 -x/2 , x, x, color);
-	 delay(10);
+     delay(10);
  }
 }
 
@@ -100,26 +132,26 @@ void testdrawrects(unsigned int color) {
 
 void testfillrects(unsigned int color1, unsigned int color2) {
 
-	unsigned char x;
+    unsigned char x;
 
  fillScreen(BLACK);
  for (x=height()-1; x > 6; x-=6) {
    fillRect((width()-1)/2 -x/2, (height()-1)/2 -x/2 , x, x, color1);
    drawRect((width()-1)/2 -x/2, (height()-1)/2 -x/2 , x, x, color2);
-	 delay(10);
+     delay(10);
  }
 }
 
 //*****************************************************************************
 
 void testfillcircles(unsigned char radius, unsigned int color) {
-	unsigned char x;
-	unsigned char y;
+    unsigned char x;
+    unsigned char y;
 
   for (x=radius; x < width()-1; x+=radius*2) {
     for (y=radius; y < height()-1; y+=radius*2) {
       fillCircle(x, y, radius, color);
-			delay(10);
+            delay(10);
     }
   }
 }
@@ -127,13 +159,13 @@ void testfillcircles(unsigned char radius, unsigned int color) {
 //*****************************************************************************
 
 void testdrawcircles(unsigned char radius, unsigned int color) {
-	unsigned char x;
-	unsigned char y;
+    unsigned char x;
+    unsigned char y;
 
   for (x=0; x < width()-1+radius; x+=radius*2) {
     for (y=0; y < height()-1+radius; y+=radius*2) {
       drawCircle(x, y, radius, color);
-			delay(10);
+            delay(10);
     }
   }
 }
@@ -155,7 +187,7 @@ void testtriangles() {
     y+=4;
     z-=4;
     color+=100;
-		delay(10);
+        delay(10);
   }
 }
 
@@ -164,7 +196,7 @@ void testtriangles() {
 void testroundrects() {
   int color = 100;
 
-	int i;
+    int i;
   int x = 0;
   int y = 0;
   int w = width();
@@ -184,48 +216,48 @@ void testroundrects() {
 
 //*****************************************************************************
 void testlines(unsigned int color) {
-	unsigned int x;
-	unsigned int y;
+    unsigned int x;
+    unsigned int y;
 
    fillScreen(BLACK);
    for (x=0; x < width()-1; x+=6) {
      drawLine(0, 0, x, height()-1, color);
    }
-	 delay(10);
+     delay(10);
    for (y=0; y < height()-1; y+=6) {
      drawLine(0, 0, width()-1, y, color);
    }
-	 delay(100);
+     delay(100);
 
    fillScreen(BLACK);
    for (x=0; x < width()-1; x+=6) {
      drawLine(width()-1, 0, x, height()-1, color);
    }
-	 delay(100);
+     delay(100);
    for (y=0; y < height()-1; y+=6) {
      drawLine(width()-1, 0, 0, y, color);
    }
-	 delay(100);
+     delay(100);
 
    fillScreen(BLACK);
    for (x=0; x < width()-1; x+=6) {
      drawLine(0, height()-1, x, 0, color);
    }
-	 delay(100);
+     delay(100);
    for (y=0; y < height()-1; y+=6) {
      drawLine(0, height()-1, width()-1, y, color);
    }
-	 delay(100);
+     delay(100);
 
    fillScreen(BLACK);
    for (x=0; x < width()-1; x+=6) {
      drawLine(width()-1, height()-1, x, 0, color);
    }
-	 delay(100);
+     delay(100);
    for (y=0; y < height()-1; y+=6) {
      drawLine(width()-1, height()-1, 0, y, color);
    }
-	 delay(100);
+     delay(100);
 
 }
 
@@ -274,4 +306,3 @@ void lcdTestPattern2(void)
 }
 
 /**************************************************************************/
-
